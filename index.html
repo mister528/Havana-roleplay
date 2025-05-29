@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="نظام الإدارة التنفيذي المتقدم لخادم Havana Roleplay">
+    <meta name="author" content="Havana Roleplay Team">
+    <meta name="theme-color" content="#667eea">
+    <title>Havana Roleplay - لوحة التحكم الإدارية المتقدمة</title>
+    <style>
+        /* Import Google Font 'Inter' and 'JetBrains Mono' */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap'); /* For code blocks */
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --secondary-gradient: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            --dark-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --text-primary: #0F172A; /* Darker text for primary content */
+            --text-secondary: #475569; /* Lighter text for secondary content */
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
+            --danger-red: #ef4444;
+            --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 15px 35px rgba(0, 0, 0, 0.12);
+            --shadow-strong: 0 25px 50px rgba(0, 0, 0, 0.15);
+            --border-radius-small: 12px;
+            --border-radius-medium: 20px;
+            --border-radius-large: 28px;
+            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 120px; /* Adjust if sticky header height changes significantly */
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+            direction: rtl;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 15% 40%, rgba(120, 119, 198, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 85% 25%, rgba(255, 119, 198, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 50% 85%, rgba(120, 219, 255, 0.25) 0%, transparent 45%);
+            pointer-events: none;
+            z-index: -1;
+            animation: subtleGradientShift 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes subtleGradientShift {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            100% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .header-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px); /* Safari & older Chrome */
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-large);
+            padding: 60px 40px;
+            box-shadow: var(--shadow-strong);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--secondary-gradient);
+            animation: expandLine 2s ease-out forwards;
+        }
+
+        @keyframes expandLine {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        .header h1 {
+            font-size: clamp(2.8em, 5vw, 4.2em);
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: -0.025em;
+            line-height: 1.15;
+        }
+
+        .header .subtitle {
+            font-size: clamp(1.1em, 2.5vw, 1.4em);
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .header .description {
+            font-size: clamp(0.9em, 2vw, 1.1em);
+            color: var(--text-secondary);
+            opacity: 0.85;
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+        }
+
+        .nav-wrapper {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); /* Safari & older Chrome */
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-medium);
+            padding: 10px;
+            box-shadow: var(--shadow-medium);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
+        }
+
+        .nav-tab {
+            padding: 16px 30px;
+            background: transparent;
+            border: none;
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            color: var(--text-secondary);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            -webkit-tap-highlight-color: transparent;
+            font-family: inherit; /* Ensure font consistency */
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--secondary-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            z-index: -1;
+            border-radius: inherit;
+        }
+
+        .nav-tab.active {
+            color: white;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.35);
+        }
+
+        .nav-tab.active::before {
+            opacity: 1;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-1px);
+            color: var(--text-primary);
+        }
+
+        .nav-tab:focus-visible { /* More specific focus style */
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        .content-wrapper {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px); /* Safari & older Chrome */
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-large);
+            padding: clamp(30px, 5vw, 60px);
+            box-shadow: var(--shadow-strong);
+            min-height: 700px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .section {
+            display: none;
+            animation: fadeInFromBottom 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(0.99);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: clamp(2.2em, 4vw, 3.2em);
+            font-weight: 700;
+            background: var(--dark-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: -0.015em;
+        }
+
+        .section-subtitle {
+            font-size: clamp(1em, 2.2vw, 1.2em);
+            color: var(--text-secondary);
+            font-weight: 500;
+            max-width: 750px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: var(--border-radius-medium);
+            padding: clamp(25px, 4vw, 40px);
+            margin-bottom: 30px;
+            border: 1px solid rgba(226, 232, 240, 0.7);
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--secondary-gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--border-radius-small);
+            background: var(--secondary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            margin-left: 18px; /* Adjusted for RTL */
+            box-shadow: 0 6px 15px rgba(79, 172, 254, 0.25);
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: clamp(1.3em, 2.5vw, 1.7em);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.35;
+        }
+
+        .card-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: clamp(0.95em, 2vw, 1.05em);
+            font-weight: 400;
+        }
+
+        .card-content p {
+            margin-bottom: 1em;
+        }
+        .card-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .severity-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 22px;
+            border-radius: 999px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-top: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: white;
+        }
+
+        .severity-low { background: linear-gradient(45deg, var(--success-green), #34d399); }
+        .severity-medium { background: linear-gradient(45deg, var(--warning-orange), #fbbf24); }
+        .severity-high { background: linear-gradient(45deg, var(--danger-red), #f87171); }
+
+        .command-block {
+            background: #0f172a; /* Dark background for code blocks */
+            color: #e2e8f0; /* Light text for code blocks */
+            padding: 20px 24px;
+            border-radius: var(--border-radius-medium);
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            margin: 20px 0;
+            border-right: 5px solid var(--accent-blue); /* RTL: border on the right */
+            border-left: none; /* RTL: no border on the left */
+            font-size: 1em;
+            position: relative;
+            overflow-x: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            text-align: left; /* Ensure LTR for code blocks */
+            direction: ltr; /* Ensure LTR for code blocks */
+        }
+
+        .command-block::before {
+            content: '$'; /* Prompt symbol */
+            position: absolute;
+            right: 10px; /* RTL: position on the right */
+            left: auto;
+            top: 19px;
+            color: var(--accent-blue);
+            font-weight: bold;
+            user-select: none;
+        }
+
+        .command-block code {
+            margin-right: 25px; /* RTL: margin for the prompt symbol */
+            margin-left: 0;
+            display: block;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .command-description {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-top: -10px;
+            margin-bottom: 15px;
+            direction: rtl; /* Ensure description is RTL */
+            text-align: right; /* Ensure description is RTL */
+        }
+
+
+        .alert-banner {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            padding: 35px;
+            border-radius: var(--border-radius-medium);
+            text-align: center;
+            font-weight: 600;
+            font-size: clamp(1em, 2.2vw, 1.25em);
+            margin: 40px 0;
+            box-shadow: var(--shadow-medium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .alert-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+            animation: shimmer 3.5s infinite linear;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(40deg); }
+            100% { transform: translateX(100%) rotate(40deg); }
+        }
+
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px); /* Safari & older Chrome */
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-medium);
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--secondary-gradient);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .stat-number {
+            font-size: clamp(2.8em, 5vw, 3.5em);
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: clamp(0.9em, 2vw, 1.05em);
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 40% 60% 60% 40% / 70% 30% 70% 30%;
+            animation: float 15s infinite ease-in-out alternate;
+            opacity: 0; /* Initial opacity for staggered animation */
+        }
+
+        @keyframes float {
+            0% { transform: translateY(20px) translateX(0px) rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: translateY(-20px) translateX(10px) rotate(90deg) scale(1); opacity: 0.8; }
+            100% { transform: translateY(20px) translateX(-10px) rotate(180deg) scale(0.9); opacity: 0.6; }
+        }
+
+        .shape:nth-child(1) { width: 90px; height: 90px; top: 15%; left: 8%; animation-duration: 18s; animation-delay: 0s; }
+        .shape:nth-child(2) { width: 130px; height: 130px; top: 65%; right: 15%; animation-duration: 22s; animation-delay: 3s; }
+        .shape:nth-child(3) { width: 70px; height: 70px; bottom: 10%; left: 35%; animation-duration: 20s; animation-delay: 6s; }
+        .shape:nth-child(4) { width: 50px; height: 50px; top: 30%; right: 40%; animation-duration: 16s; animation-delay: 1s; display: none; } /* Hidden by default, shown on smaller screens */
+
+        .pulse-animation.active {
+            animation: pulse 2s infinite ease-out;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(79, 172, 254, 0.3); }
+            70% { box-shadow: 0 0 0 15px rgba(79, 172, 254, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(79, 172, 254, 0); }
+        }
+
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* --- START: Enhanced Password Prompt Styling --- */
+        .password-prompt-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .password-form-card {
+            max-width: 480px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: var(--border-radius-medium);
+            box-shadow: var(--shadow-medium);
+            border: 1px solid rgba(200, 200, 220, 0.5);
+        }
+        #password-input {
+            width: 100%;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            border-radius: var(--border-radius-small);
+            border: 1px solid #cbd5e1;
+            font-size: 1.1em;
+            text-align: right;
+            background-color: #f8fafc;
+            color: var(--text-primary);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-family: inherit; /* Ensure font consistency */
+        }
+        #password-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Focus ring */
+        }
+
+        /* Updated Button Style */
+        #password-submit-button {
+            background: var(--primary-gradient); /* Using primary gradient */
+            color: white;
+            padding: 16px 35px;
+            border: none;
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            /* Adjusted transition for filter property */
+            transition: filter 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+            /* Shadow to complement the gradient - can be adjusted */
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.25); /* Softer shadow matching purple tones */
+            width: 100%;
+            font-family: inherit; /* Ensure font consistency */
+            display: flex; /* For spinner alignment */
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Space between spinner and text */
+            position: relative; /* For potential pseudo-elements if needed later */
+            overflow: hidden; /* Ensures gradient confines */
+        }
+
+        #password-submit-button:hover:not(:disabled) {
+            /* background: var(--primary-gradient); // Gradient remains */
+            filter: brightness(1.1) saturate(1.1); /* Subtle enhancement on hover */
+            transform: translateY(-2px) scale(1.01); /* Slight lift and scale */
+            /* Slightly more pronounced shadow on hover */
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.3);
+        }
+
+        #password-submit-button:active:not(:disabled) {
+            /* background: var(--primary-gradient); // Gradient remains */
+            filter: brightness(0.95) saturate(1.05); /* Slightly darker/pressed effect */
+            transform: translateY(-1px) scale(1.005); /* Smaller lift for active state */
+            box-shadow: 0 4px 12px rgba(118, 75, 162, 0.28); /* Shadow pulled in slightly */
+        }
+
+        #password-submit-button:disabled {
+            background: #b0b8c5; /* More neutral disabled color, could also use a desaturated gradient */
+            color: #6b7280;
+            cursor: not-allowed;
+            transform: translateY(0) scale(1);
+            box-shadow: none;
+            opacity: 0.65;
+        }
+        /* End of Updated Button Style */
+
+        .password-message-area {
+            margin-top: 25px;
+            font-weight: 500;
+            font-size: 1.05em;
+            padding: 12px 18px;
+            border-radius: var(--border-radius-small);
+            display: none;
+            line-height: 1.5;
+        }
+        .password-message-area.error {
+            color: var(--danger-red);
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            display: block;
+        }
+        .password-message-area.success {
+            color: var(--success-green);
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            display: block;
+        }
+        .password-message-area.lockout {
+            color: var(--warning-orange);
+            background-color: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            display: block;
+        }
+        /* --- END: Enhanced Password Prompt Styling --- */
+
+        /* Loading Spinner for Password Button */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none; /* Hidden by default */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .button-text { /* To hide/show text next to spinner */
+            display: inline-block;
+        }
+
+        /* Accessibility: Screen Reader Only */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Responsive Design Adjustments */
+        @media (max-width: 1024px) {
+            .container { padding: 30px 15px; }
+            .content-wrapper { padding: clamp(30px, 4vw, 40px); }
+            .nav-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 8px;
+            }
+            .nav-tab { padding: 14px 20px; text-align: center; }
+            .shape:nth-child(4) { display: block; } /* Show 4th shape on medium screens */
+        }
+
+        @media (max-width: 768px) {
+            .header-content { padding: 40px 25px; }
+            .content-wrapper { padding: 25px 15px; }
+            .card { padding: 25px 18px; }
+            .card-icon { width: 44px; height: 44px; font-size: 1.2em; margin-left: 12px; } /* Adjusted for RTL */
+            .floating-shapes .shape { width: calc(var(--base-size, 60px) * 0.8); height: calc(var(--base-size, 60px) * 0.8); }
+            .shape:nth-child(2) { display: none; } /* Hide 2nd shape on small screens */
+            .password-form-card { padding: 30px 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .nav-tab { font-size: 0.9rem; }
+            .section-title { font-size: clamp(1.8em, 6vw, 2.2em); }
+            .card-title { font-size: clamp(1.1em, 4vw, 1.4em); }
+            .alert-banner { padding: 25px; }
+            .shape:nth-child(3) { display: none; } /* Hide 3rd shape on very small screens */
+            #password-input, #password-submit-button { font-size: 1em; padding: 14px; }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white !important; /* Ensure override */
+                color: black !important;
+                font-family: 'Times New Roman', Times, serif; /* Common print font */
+            }
+
+            .floating-shapes,
+            .navigation,
+            .password-prompt-container,
+            body::before /* Hide decorative background gradients */ {
+                display: none !important;
+            }
+
+            .header-content,
+            .content-wrapper,
+            .card,
+            .stat-card {
+                background: white !important;
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+
+            .header h1, .section-title, .stat-number {
+                background: none !important;
+                -webkit-background-clip: unset !important;
+                -webkit-text-fill-color: unset !important;
+                background-clip: unset !important;
+                color: black !important;
+            }
+
+            .nav-tab, .alert-banner, .severity-indicator, .card-icon, .stat-card::before, .header-content::before, .content-wrapper::before {
+                background: #eee !important;
+                color: black !important;
+            }
+
+            a {
+                text-decoration: underline;
+                color: blue;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="floating-shapes" aria-hidden="true">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1>🏛️ Havana Roleplay</h1>
+                <p class="subtitle">نظام الإدارة التنفيذي المتقدم</p>
+                <p class="description">منصة إدارية شاملة ومتطورة لضمان أعلى معايير الجودة والاحترافية في بيئة الخادم. مصممة لتوفير أدوات فعالة وسهلة الاستخدام للإدارة اليومية.</p>
+            </div>
+        </header>
+
+        <nav class="navigation" aria-label="القائمة الرئيسية">
+            <div class="nav-wrapper" role="tablist">
+                <button id="tab-rules" class="nav-tab active" onclick="showSection('rules')" role="tab" aria-selected="true" aria-controls="rules">📋 دليل الإدارة</button>
+                <button id="tab-punishments" class="nav-tab" onclick="showSection('punishments')" role="tab" aria-selected="false" aria-controls="punishments">⚖️ نظام العقوبات</button>
+                <button id="tab-commands" class="nav-tab" onclick="showSection('commands')" role="tab" aria-selected="false" aria-controls="commands">💻 وحدة التحكم</button>
+            </div>
+        </nav>
+
+        <main class="content-wrapper">
+            <section id="rules" class="section active" role="tabpanel" aria-labelledby="tab-rules">
+                <div class="section-header">
+                    <h2 class="section-title">دليل الإدارة التنفيذي</h2>
+                    <p class="section-subtitle">المعايير والمبادئ الأساسية للإدارة المهنية والمسؤولة في بيئة الخادم لتحقيق تجربة لعب مثالية.</p>
+                </div>
+                <div class="alert-banner">
+                    🛡️ الالتزام الكامل بهذه المعايير ضروري لضمان بيئة عادلة ومهنية لجميع اللاعبين وأعضاء الفريق.
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <h3 class="card-title">الاحترافية والتميز التشغيلي</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>يتطلب من جميع أعضاء الفريق الإداري الحفاظ على أعلى مستويات الاحترافية في التفاعل مع المجتمع. يشمل ذلك استخدام لغة محترمة وبناءة، والاستجابة السريعة للاستفسارات، وتقديم الدعم الفني بطريقة واضحة ومفهومة. كما يجب الحفاظ على الهدوء والحكمة في المواقف الصعبة وتجنب ردود الأفعال العاطفية التي قد تؤثر على جودة الخدمة المقدمة.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚖️</div>
+                        <h3 class="card-title">العدالة والمساواة في التطبيق</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>تطبيق القوانين والسياسات بعدالة تامة على جميع أعضاء المجتمع دون تمييز أو محاباة. يجب معاملة كل حالة بناءً على وقائعها وظروفها الفردية، مع الالتزام بالمعايير المحددة مسبقاً. لا يُسمح بأي استثناءات شخصية أو تطبيق متحيز للقوانين، حتى لو كان ذلك يخص أعضاء الإدارة أو الأصدقاء الشخصيين.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <h3 class="card-title">التوثيق الشامل والأرشفة</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>ضرورة توثيق جميع الأحداث والقرارات الإدارية بتفاصيل دقيقة وشاملة. يجب حفظ الأدلة المرئية والنصية لكل حادثة، مع تسجيل التواريخ والأوقات وأسماء الأطراف المعنية. يتم الاحتفاظ بهذه السجلات لمدة لا تقل عن ستة أشهر لضمان المتابعة والمراجعة اللاحقة عند الحاجة، وتكون متاحة للإدارة العليا في أي وقت.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📈</div>
+                        <h3 class="card-title">التدرج المنهجي في الإجراءات</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>اتباع نهج متدرج ومدروس في تطبيق الإجراءات التأديبية، بدءاً من التوجيه والإرشاد، ثم التحذير الرسمي، وصولاً إلى الإجراءات الأكثر صرامة عند الضرورة. يجب تقييم كل حالة بعناية والنظر في تاريخ اللاعب السابق وطبيعة المخالفة وظروفها. الهدف هو التعليم والإصلاح قبل العقاب، مع الحفاظ على بيئة آمنة للجميع.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔒</div>
+                        <h3 class="card-title">الخصوصية وسرية المعلومات</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>المحافظة الصارمة على خصوصية المعلومات الشخصية وتفاصيل القضايا الإدارية. عدم مشاركة أو مناقشة المعلومات الحساسة خارج نطاق الفريق الإداري المختص. يجب التعامل مع البيانات الشخصية وفقاً لأعلى معايير الأمان والخصوصية، مع ضمان عدم إساءة استخدام هذه المعلومات لأغراض شخصية أو غير مهنية.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🚀</div>
+                        <h3 class="card-title">التطوير المستمر والابتكار</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>الالتزام بالتعلم المستمر ومواكبة أحدث التطورات في مجال إدارة الخوادم والمجتمعات الرقمية. المشاركة الفعالة في جلسات التدريب والاجتماعات التطويرية، وتقديم اقتراحات بناءة لتحسين الأنظمة والعمليات. يشجع كل عضو في الفريق على الابتكار وتقديم حلول إبداعية للتحديات التي تواجه المجتمع.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="punishments" class="section" role="tabpanel" aria-labelledby="tab-punishments">
+                <div class="section-header">
+                    <h2 class="section-title">نظام العقوبات المتدرج</h2>
+                    <p class="section-subtitle">إطار عمل شامل ومتوازن لضمان العدالة والفعالية في تطبيق الإجراءات التأديبية وفقاً لسياسات الخادم.</p>
+                </div>
+                <div class="alert-banner">
+                    ⚖️ كل عقوبة يجب أن تكون مبررة، متناسبة مع درجة المخالفة، ومدعومة بأدلة واضحة وموثقة.
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🗣️</div>
+                        <h3 class="card-title">التوجيه والإرشاد الأولي</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>المرحلة الأولى في معالجة السلوكيات غير المرغوبة، حيث يتم التواصل المباشر مع اللاعب لتوضيح القوانين وشرح السلوك المطلوب. يتم هذا التوجيه بطريقة ودية وتعليمية، مع التأكيد على أهمية احترام قوانين المجتمع. يُسجل هذا التوجيه في ملف اللاعب كمرجع مستقبلي، ولكنه لا يُعتبر عقوبة رسمية.</p>
+                    </div>
+                    <div class="severity-indicator severity-low">مستوى إرشادي</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚠️</div>
+                        <h3 class="card-title">التحذير الرسمي المكتوب</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>إجراء رسمي يتم توثيقه في السجل الدائم للاعب، يُستخدم للمخالفات المتكررة أو التي تتطلب تنبيهاً أكثر جدية. يتضمن التحذير تفاصيل المخالفة والقانون المخالف والعواقب المحتملة في حالة التكرار. يتم إرسال نسخة من التحذير للاعب مع إمكانية الرد والاستفسار حول المخالفة المزعومة.</p>
+                    </div>
+                    <div class="severity-indicator severity-low">مستوى تنبيهي</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔇</div>
+                        <h3 class="card-title">القيود المؤقتة على التواصل</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>منع اللاعب من استخدام وسائل التواصل داخل الخادم لفترة محددة تتراوح من 30 دقيقة إلى 48 ساعة، حسب طبيعة المخالفة وتكرارها. يُطبق هذا الإجراء على المخالفات المتعلقة بالتواصل غير اللائق، الإزعاج، أو نشر محتوى غير مناسب. يتم إخطار اللاعب بسبب القيد ومدته بوضوح.</p>
+                    </div>
+                    <div class="severity-indicator severity-medium">مستوى متوسط</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⏳</div>
+                        <h3 class="card-title">الإيقاف المؤقت عن الخدمة</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>حظر اللاعب من دخول الخادم لفترة محددة، تتراوح عادة من يوم واحد إلى عدة أسابيع، بناءً على خطورة المخالفة وسجل اللاعب. يُستخدم هذا الإجراء للمخالفات الجسيمة أو التكرار المستمر للسلوكيات السلبية بعد التحذيرات. يجب توثيق سبب الإيقاف ومدته بدقة.</p>
+                    </div>
+                    <div class="severity-indicator severity-medium">مستوى متوسط - مرتفع</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🚫</div>
+                        <h3 class="card-title">الإيقاف الدائم من الخدمة</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>الإجراء الأقصى ويتم تطبيقه في حالات المخالفات الشديدة جداً مثل الغش، استغلال الثغرات بشكل كبير، التهديدات الخطيرة، أو السلوكيات التي تضر بسلامة المجتمع بشكل لا يمكن إصلاحه. هذا القرار نهائي ويتطلب موافقة من الإدارة العليا بعد مراجعة شاملة للأدلة.</p>
+                    </div>
+                    <div class="severity-indicator severity-high">مستوى أقصى</div>
+                </div>
+            </section>
+
+            <section id="commands" class="section" role="tabpanel" aria-labelledby="tab-commands">
+                <div id="password-prompt-container" class="password-prompt-container">
+                    <div class="section-header" style="margin-bottom: 30px;"> <h2 class="section-title">وحدة التحكم - تسجيل الدخول</h2>
+                        <p class="section-subtitle">الرجاء إدخال كلمة المرور للوصول إلى وحدة التحكم.</p>
+                    </div>
+                    <div class="password-form-card">
+                        <input type="password" id="password-input" placeholder="كلمة المرور" aria-label="كلمة المرور" autocomplete="current-password">
+                        <button id="password-submit-button" type="button">
+                            <span class="spinner" aria-hidden="true"></span>
+                            <span class="button-text">
+                                <svg style="width: 1em; height: 1em; margin-left: 8px; vertical-align: middle;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2v-7a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+                                </svg>
+                                دخول
+                            </span>
+                        </button>
+                        <p id="password-message" class="password-message-area" aria-live="polite"></p>
+                    </div>
+                </div>
+
+                <div id="commands-content" style="display: none;">
+                    <div class="section-header">
+                        <h2 class="section-title">وحدة التحكم والأوامر</h2>
+                        <p class="section-subtitle">مرجع سريع لأهم الأوامر الإدارية المستخدمة في إدارة الخادم واللاعبين بفعالية.</p>
+                    </div>
+                    <div class="alert-banner">
+                        💡 استخدم هذه الأوامر بحكمة ومسؤولية. تأكد من فهمك لوظيفة كل أمر قبل استخدامه.
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">👤</div>
+                            <h3 class="card-title">أوامر إدارة اللاعبين</h3>
+                        </div>
+                        <div class="card-content">
+                            <p>مجموعة من الأوامر للتحكم في اللاعبين المتواجدين في الخادم.</p>
+                            <div class="command-block"><code>/kick [ID/Name] [Reason]</code></div>
+                            <p class="command-description">لطرد لاعب من الخادم مع ذكر السبب.</p>
+                            <div class="command-block"><code>/ban [ID/Name] [Time] [Reason]</code></div>
+                            <p class="command-description">لحظر لاعب لفترة محددة أو دائمة مع ذكر السبب.</p>
+                            <div class="command-block"><code>/mute [ID/Name] [Time] [Reason]</code></div>
+                            <p class="command-description">لكتم صوت لاعب لفترة محددة.</p>
+                            <div class="command-block"><code>/goto [ID/Name]</code></div>
+                            <p class="command-description">للانتقال إلى موقع لاعب محدد.</p>
+                             <div class="command-block"><code>/bring [ID/Name]</code></div>
+                            <p class="command-description">لجلب لاعب إليك.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🛠️</div>
+                            <h3 class="card-title">أوامر إدارة الخادم</h3>
+                        </div>
+                        <div class="card-content">
+                            <p>أوامر للتحكم في إعدادات وحالة الخادم العامة.</p>
+                            <div class="command-block"><code>/server restart [TimeInMinutes]</code></div>
+                            <p class="command-description">لإعادة تشغيل الخادم بعد فترة زمنية محددة.</p>
+                            <div class="command-block"><code>/announce [Message]</code></div>
+                            <p class="command-description">لإرسال إعلان عام لجميع اللاعبين في الخادم.</p>
+                            <div class="command-block"><code>/weather [Sunny/Rainy/Stormy]</code></div>
+                            <p class="command-description">لتغيير حالة الطقس في الخادم.</p>
+                        </div>
+                    </div>
+                     <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">💬</div>
+                            <h3 class="card-title">أوامر التواصل الإداري</h3>
+                        </div>
+                        <div class="card-content">
+                            <p>أوامر مخصصة للتواصل بين أعضاء الفريق الإداري.</p>
+                            <div class="command-block"><code>/adminchat [Message]</code></div>
+                            <p class="command-description">لإرسال رسالة في محادثة الإداريين الخاصة.</p>
+                            <div class="command-block"><code>/staffonline</code></div>
+                            <p class="command-description">لعرض قائمة الإداريين المتصلين حالياً.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // --- START: Password Protection and Section Switching Logic ---
+        const correctPassword = "Gp@7xYz!29"; // كلمة المرور الصحيحة (يجب تغييرها في بيئة الإنتاج)
+        const maxLoginAttempts = 3; // أقصى عدد للمحاولات قبل الإغلاق
+        const lockoutDuration = 30 * 60 * 1000; // مدة الإغلاق: 30 دقيقة بالمللي ثانية
+
+        // مفاتيح التخزين المحلي
+        const loginAttemptsKey = "adminPanel_loginAttempts";
+        const lockoutEndTimeKey = "adminPanel_lockoutEndTime";
+
+        // متغير لتتبع حالة المصادقة خلال الجلسة الحالية لتجنب طلب كلمة المرور مرارًا
+        let isCommandsAuthenticatedThisSession = false;
+        let lockoutIntervalId = null; // معرّف المؤقت لتحديث رسالة الإغلاق
+
+        // عناصر واجهة المستخدم المتعلقة بكلمة المرور
+        const passwordPromptContainer = document.getElementById('password-prompt-container');
+        const commandsContent = document.getElementById('commands-content');
+        const passwordInput = document.getElementById('password-input');
+        const passwordSubmitButton = document.getElementById('password-submit-button');
+        const passwordMessage = document.getElementById('password-message');
+        const spinner = passwordSubmitButton.querySelector('.spinner');
+        const buttonText = passwordSubmitButton.querySelector('.button-text');
+
+
+        /**
+         * يعرض القسم المطلوب ويخفي الآخرين.
+         * يدير طلب كلمة المرور إذا كان القسم هو 'commands' ولم تتم المصادقة.
+         * @param {string} sectionId - معرّف القسم المراد إظهاره.
+         */
+        function showSection(sectionId) {
+            // إخفاء جميع الأقسام أولاً
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+                section.style.display = 'none'; // ضمان الإخفاء الفوري
+            });
+
+            // إلغاء تنشيط جميع علامات التبويب
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active', 'pulse-animation');
+                tab.setAttribute('aria-selected', 'false');
+            });
+
+            const targetSection = document.getElementById(sectionId);
+            const targetTab = document.querySelector(`.nav-tab[aria-controls="${sectionId}"]`);
+
+            // تنشيط علامة التبويب المستهدفة
+            if (targetTab) {
+                targetTab.classList.add('active', 'pulse-animation');
+                targetTab.setAttribute('aria-selected', 'true');
+            }
+
+            // التعامل مع قسم الأوامر بشكل خاص
+            if (sectionId === 'commands') {
+                if (targetSection) targetSection.style.display = 'block';
+
+                if (!isCommandsAuthenticatedThisSession) {
+                    handleCommandsAccess();
+                } else {
+                    passwordPromptContainer.style.display = 'none';
+                    commandsContent.style.display = 'block';
+                    if (targetSection && !targetSection.classList.contains('active')) {
+                         setTimeout(() => targetSection.classList.add('active'), 10);
+                    }
+                }
+            } else {
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                    setTimeout(() => {
+                        targetSection.classList.add('active');
+                    }, 10);
+                }
+            }
+        }
+
+        /**
+         * يدير الوصول إلى قسم الأوامر.
+         * يتحقق من حالة الإغلاق الحالية ويعرض طلب كلمة المرور إذا لم يكن مغلقًا.
+         */
+        function handleCommandsAccess() {
+            const lockoutEndTime = parseInt(localStorage.getItem(lockoutEndTimeKey), 10);
+            const now = Date.now();
+
+            if (lockoutEndTime && now < lockoutEndTime) {
+                displayLockoutMessage(lockoutEndTime);
+                passwordPromptContainer.style.display = 'block';
+                commandsContent.style.display = 'none';
+                return;
+            } else if (lockoutEndTime && now >= lockoutEndTime) {
+                localStorage.removeItem(loginAttemptsKey);
+                localStorage.removeItem(lockoutEndTimeKey);
+                if (lockoutIntervalId) clearInterval(lockoutIntervalId);
+            }
+
+            passwordPromptContainer.style.display = 'block';
+            commandsContent.style.display = 'none';
+            passwordInput.value = '';
+            passwordMessage.textContent = '';
+            passwordMessage.className = 'password-message-area';
+            passwordInput.disabled = false;
+            passwordSubmitButton.disabled = false;
+            if(spinner) spinner.style.display = 'none';
+            if(buttonText) buttonText.style.display = 'inline-block';
+            passwordInput.focus();
+        }
+
+        /**
+         * يعرض رسالة الإغلاق مع عداد تنازلي للوقت المتبقي.
+         * @param {number} lockoutEndTime - وقت انتهاء الإغلاق بالمللي ثانية.
+         */
+        function displayLockoutMessage(lockoutEndTime) {
+            if (lockoutIntervalId) clearInterval(lockoutIntervalId);
+
+            function updateMessage() {
+                const now = Date.now();
+                const timeLeft = lockoutEndTime - now;
+
+                if (timeLeft <= 0) {
+                    passwordMessage.textContent = "انتهت فترة الإغلاق. يمكنك محاولة تسجيل الدخول مرة أخرى.";
+                    passwordMessage.className = 'password-message-area success';
+                    localStorage.removeItem(loginAttemptsKey);
+                    localStorage.removeItem(lockoutEndTimeKey);
+                    passwordInput.disabled = false;
+                    passwordSubmitButton.disabled = false;
+                    if(spinner) spinner.style.display = 'none';
+                    if(buttonText) buttonText.style.display = 'inline-block';
+                    clearInterval(lockoutIntervalId);
+                    return;
+                }
+                const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+                const seconds = Math.floor((timeLeft / 1000) % 60);
+                passwordMessage.textContent = `لقد تجاوزت الحد الأقصى لمحاولات تسجيل الدخول. يرجى الانتظار لمدة ${minutes} دقيقة و ${seconds} ثانية.`;
+                passwordMessage.className = 'password-message-area lockout';
+                passwordMessage.style.display = 'block';
+            }
+            updateMessage();
+            lockoutIntervalId = setInterval(updateMessage, 1000);
+            passwordInput.disabled = true;
+            passwordSubmitButton.disabled = true;
+            if(spinner) spinner.style.display = 'none';
+            if(buttonText) buttonText.style.display = 'inline-block'; // Ensure text is visible if spinner was on
+        }
+
+        /**
+         * يتحقق من كلمة المرور المدخلة.
+         * يدير محاولات تسجيل الدخول وحالة الإغلاق.
+         */
+        function checkPassword() {
+            const enteredPassword = passwordInput.value;
+            let attempts = parseInt(localStorage.getItem(loginAttemptsKey), 10) || 0;
+
+            passwordSubmitButton.disabled = true;
+            if(spinner) spinner.style.display = 'inline-block';
+            if(buttonText) buttonText.style.display = 'none';
+            passwordMessage.textContent = ''; // Clear previous messages
+            passwordMessage.className = 'password-message-area';
+
+
+            setTimeout(() => {
+                if (enteredPassword === correctPassword) {
+                    passwordMessage.textContent = "تم تسجيل الدخول بنجاح! جاري تحميل وحدة التحكم...";
+                    passwordMessage.className = 'password-message-area success';
+                    passwordMessage.style.display = 'block';
+                    isCommandsAuthenticatedThisSession = true;
+                    localStorage.removeItem(loginAttemptsKey);
+                    localStorage.removeItem(lockoutEndTimeKey);
+                    if (lockoutIntervalId) clearInterval(lockoutIntervalId);
+
+                    setTimeout(() => {
+                        passwordPromptContainer.style.display = 'none';
+                        commandsContent.style.display = 'block';
+                        const commandsSection = document.getElementById('commands');
+                        if (commandsSection && !commandsSection.classList.contains('active')) {
+                            commandsSection.classList.add('active');
+                        }
+                        // Reset button state for future interactions if needed, though it's hidden now
+                        passwordSubmitButton.disabled = false;
+                        if(spinner) spinner.style.display = 'none';
+                        if(buttonText) buttonText.style.display = 'inline-block';
+                    }, 1000);
+
+                } else {
+                    attempts++;
+                    localStorage.setItem(loginAttemptsKey, attempts);
+                    passwordInput.value = '';
+
+                    if (attempts >= maxLoginAttempts) {
+                        const newLockoutEndTime = Date.now() + lockoutDuration;
+                        localStorage.setItem(lockoutEndTimeKey, newLockoutEndTime);
+                        displayLockoutMessage(newLockoutEndTime);
+                        // Spinner and button text already handled by displayLockoutMessage's disabling of button
+                    } else {
+                        passwordMessage.textContent = `كلمة المرور خاطئة. تبقى لديك ${maxLoginAttempts - attempts} محاولة.`;
+                        passwordMessage.className = 'password-message-area error';
+                        passwordMessage.style.display = 'block';
+                        passwordSubmitButton.disabled = false;
+                        if(spinner) spinner.style.display = 'none';
+                        if(buttonText) buttonText.style.display = 'inline-block';
+                        passwordInput.focus();
+                    }
+                }
+            }, 500); // Simulate network delay
+        }
+
+        // ربط حدث النقر بزر إرسال كلمة المرور
+        if (passwordSubmitButton) {
+            passwordSubmitButton.addEventListener('click', checkPassword);
+        }
+        // السماح بالإرسال عند الضغط على مفتاح "Enter" في حقل كلمة المرور
+        if (passwordInput) {
+            passwordInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter' && !passwordSubmitButton.disabled) {
+                    event.preventDefault();
+                    checkPassword();
+                }
+            });
+        }
+
+        // تهيئة الصفحة عند تحميل محتوى DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialActiveTab = document.querySelector('.nav-tab.active');
+            let initialSectionId = 'rules';
+
+            if (initialActiveTab) {
+                initialSectionId = initialActiveTab.getAttribute('aria-controls');
+                if (!initialActiveTab.classList.contains('pulse-animation')) {
+                     initialActiveTab.classList.add('pulse-animation');
+                }
+                initialActiveTab.setAttribute('aria-selected', 'true');
+                 document.querySelectorAll('.nav-tab:not(.active)').forEach(tab => {
+                    tab.setAttribute('aria-selected', 'false');
+                });
+            }
+
+            showSection(initialSectionId);
+        });
+        // --- END: Password Protection and Section Switching Logic ---
+    </script>
+</body>
+</html>
